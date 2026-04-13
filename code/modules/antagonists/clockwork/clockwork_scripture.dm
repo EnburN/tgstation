@@ -2,16 +2,10 @@
 GLOBAL_LIST_INIT(clockwork_scripture_types, generate_clockwork_scripture_types())
 
 /proc/generate_clockwork_scripture_types()
-	var/list/types = list()
-	for(var/datum/clockwork_scripture/scripture_type as anything in subtypesof(/datum/clockwork_scripture))
-		if(initial(scripture_type.name) == "base scripture")
-			continue
-		if(initial(scripture_type.abstract_type))
-			continue
-		types += scripture_type
-	return types
+	return valid_subtypesof(/datum/clockwork_scripture)
 
 /datum/clockwork_scripture
+	abstract_type = /datum/clockwork_scripture
 	/// Display name
 	var/name = "base scripture"
 	/// Description shown in slab UI
@@ -28,8 +22,6 @@ GLOBAL_LIST_INIT(clockwork_scripture_types, generate_clockwork_scripture_types()
 	var/whispered_invocation = "Cog-rathvar!"
 	/// Icon state for quickbind HUD button
 	var/quickbind_icon = "clockwork_slab"
-	/// If TRUE, this is an abstract type that shouldn't be listed
-	var/abstract_type = FALSE
 	/// Whether this scripture is only for cyborgs
 	var/cyborg_only = FALSE
 
@@ -37,7 +29,7 @@ GLOBAL_LIST_INIT(clockwork_scripture_types, generate_clockwork_scripture_types()
 /datum/clockwork_scripture/proc/can_invoke(mob/living/user, obj/item/clockwork_slab/slab)
 	if(!IS_CLOCKWORK(user))
 		return FALSE
-	if(user.incapacitated())
+	if(user.incapacitated)
 		return FALSE
 
 	var/datum/antagonist/clockwork/clock_datum = GET_CLOCKWORK(user)
@@ -122,6 +114,6 @@ GLOBAL_LIST_INIT(clockwork_scripture_types, generate_clockwork_scripture_types()
 	for(var/mob/living/nearby in range(1, user))
 		if(nearby == user)
 			continue
-		if(IS_CLOCKWORK(nearby) && !nearby.incapacitated())
+		if(IS_CLOCKWORK(nearby) && !nearby.incapacitated)
 			count++
 	return count

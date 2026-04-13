@@ -18,7 +18,7 @@
 /obj/structure/destructible/clockwork/examine(mob/user)
 	. = ..()
 	if(IS_CLOCKWORK(user))
-		. += span_brass("Integrity: [obj_integrity]/[max_integrity]")
+		. += span_brass("Integrity: [get_integrity()]/[max_integrity]")
 
 /obj/structure/destructible/clockwork/wrench_act(mob/living/user, obj/item/tool)
 	if(!IS_CLOCKWORK(user))
@@ -32,5 +32,5 @@
 	return TRUE
 
 /obj/structure/destructible/clockwork/proc/get_effectiveness()
-	var/health_ratio = obj_integrity / max_integrity
+	var/health_ratio = get_integrity() / max_integrity
 	return max(0.5, health_ratio)

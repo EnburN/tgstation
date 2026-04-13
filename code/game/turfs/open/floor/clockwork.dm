@@ -5,7 +5,6 @@
 	icon_state = "clockwork_floor"
 	floor_tile = null
 	baseturfs = /turf/open/floor/plating
-	tiled_dirt = FALSE
 
 /turf/open/floor/clockwork/Initialize(mapload)
 	. = ..()
@@ -21,7 +20,7 @@
 			continue
 		if(servant.stat == DEAD)
 			continue
-		servant.adjustToxLoss(-CLOCKWORK_FLOOR_HEAL_RATE * seconds_per_tick, FALSE)
+		servant.adjust_tox_loss(-CLOCKWORK_FLOOR_HEAL_RATE * seconds_per_tick, FALSE)
 
 /// Indestructible variant for Reebe's pre-built floors
 /turf/open/floor/clockwork/reebe
@@ -31,6 +30,3 @@
 
 /turf/open/floor/clockwork/reebe/attackby(obj/item/attacking_item, mob/user, params)
 	return
-
-/turf/open/floor/clockwork/reebe/try_decon(obj/item/attacking_item, mob/user, params)
-	return FALSE

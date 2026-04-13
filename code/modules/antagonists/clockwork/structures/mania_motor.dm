@@ -39,7 +39,7 @@
 			continue
 		if(victim.stat == DEAD)
 			continue
-		victim.adjustBruteLoss(1 * seconds_per_tick * effectiveness)
+		victim.adjust_brute_loss(1 * seconds_per_tick * effectiveness)
 		if(prob(15 * seconds_per_tick * effectiveness))
 			victim.adjust_hallucinations(30 SECONDS)
 		if(prob(10 * seconds_per_tick * effectiveness))

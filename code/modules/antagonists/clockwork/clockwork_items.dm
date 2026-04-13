@@ -37,7 +37,6 @@
 	name = "wraith spectacles"
 	desc = "Bronze-rimmed glasses that allow the wearer to see through walls."
 	vision_flags = SEE_TURFS | SEE_MOBS | SEE_OBJS
-	darkness_view = 8
 
 /obj/item/clothing/glasses/clockwork/wraith/equipped(mob/user, slot)
 	. = ..()
@@ -58,7 +57,7 @@
 		break
 	if(ishuman(loc))
 		var/mob/living/carbon/human/human_wearer = loc
-		var/obj/item/organ/internal/eyes/eyes = human_wearer.get_organ_slot(ORGAN_SLOT_EYES)
+		var/obj/item/organ/eyes/eyes = human_wearer.get_organ_slot(ORGAN_SLOT_EYES)
 		if(eyes)
 			eyes.apply_organ_damage(0.5 * seconds_per_tick)
 
@@ -104,7 +103,7 @@
 	breakouttime = 30 SECONDS
 	var/disposable = TRUE
 
-/obj/item/restraints/handcuffs/clockwork/removed(mob/living/carbon/target)
+/obj/item/restraints/handcuffs/clockwork/on_uncuffed(datum/source, mob/living/wearer)
 	. = ..()
 	if(disposable)
 		qdel(src)
@@ -131,7 +130,7 @@
 	if(!proximity_flag || !isliving(target))
 		return
 	var/mob/living/victim = target
-	victim.adjustFireLoss(5)
+	victim.adjust_fire_loss(5)
 	GLOB.clockwork_vitality += 5
 
 // ---- Ratvarian Armor ----

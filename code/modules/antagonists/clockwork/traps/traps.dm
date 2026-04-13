@@ -92,7 +92,7 @@
 // ---- Receivers ----
 /obj/structure/clockwork_trap/receiver
 
-/obj/structure/clockwork_trap/receiver/proc/receive_signal(obj/structure/clockwork_trap/sender/source)
+/obj/structure/clockwork_trap/receiver/receive_signal(obj/structure/clockwork_trap/sender/source)
 	return
 
 /obj/structure/clockwork_trap/receiver/skewer
@@ -124,7 +124,7 @@
 
 /obj/structure/clockwork_trap/receiver/skewer/proc/impale(mob/living/victim)
 	visible_message(span_danger("[src] impales [victim]!"))
-	victim.adjustBruteLoss(40)
+	victim.adjust_brute_loss(40)
 	victim.Paralyze(3 SECONDS)
 	to_chat(victim, span_userdanger("You are impaled on the skewer!"))
 	victim.Immobilize(30 SECONDS)
@@ -152,7 +152,7 @@
 			continue
 		if(ishuman(victim))
 			var/mob/living/carbon/human/human_victim = victim
-			human_victim.adjust_wet_status(WATER_EXTINGUISHER, 2 SECONDS)
+			human_victim.adjust_wet_stacks(20)
 
 /obj/structure/clockwork_trap/receiver/steam_vent/Destroy()
 	STOP_PROCESSING(SSobj, src)

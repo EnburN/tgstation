@@ -48,4 +48,4 @@
 	damage *= (1 - obstacles * WARDEN_OBSTACLE_REDUCTION)
 	damage = max(0, damage)
 	if(damage > 0)
-		target.adjustFireLoss(damage)
+		target.adjust_fire_loss(damage)

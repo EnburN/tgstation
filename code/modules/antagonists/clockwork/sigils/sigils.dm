@@ -140,7 +140,7 @@
 			target.gib()
 			return
 		var/damage = min(5, target.health)
-		target.adjustToxLoss(damage)
+		target.adjust_tox_loss(damage)
 		GLOB.clockwork_vitality += damage
 		sleep(1 SECONDS)
 
@@ -150,8 +150,8 @@
 		return
 	while(!QDELETED(src) && !QDELETED(target) && get_turf(target) == get_turf(src) && GLOB.clockwork_vitality > 0)
 		var/heal_amount = min(10, GLOB.clockwork_vitality)
-		target.adjustBruteLoss(-heal_amount * 0.5)
-		target.adjustFireLoss(-heal_amount * 0.5)
+		target.adjust_brute_loss(-heal_amount * 0.5)
+		target.adjust_fire_loss(-heal_amount * 0.5)
 		GLOB.clockwork_vitality -= heal_amount
 		sleep(0.5 SECONDS)
 
@@ -161,7 +161,7 @@
 	if(GLOB.clockwork_vitality < VITALITY_REVIVE_COST)
 		return
 	GLOB.clockwork_vitality -= VITALITY_REVIVE_COST
-	target.revive(ADMIN_REVIVE)
+	target.revive(ADMIN_HEAL_ALL)
 	COOLDOWN_START(src, revive_cooldown, 1 MINUTES)
 	visible_message(span_warning("[src] blazes with energy as [target] is brought back!"))
 	qdel(src)
