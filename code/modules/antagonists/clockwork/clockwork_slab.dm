@@ -1,12 +1,12 @@
 /obj/item/clockwork_slab
 	name = "clockwork slab"
 	desc = "A strange bronze tablet covered in shifting glyphs and tiny gears."
-	icon = 'icons/obj/antags/cult/items.dmi'
-	icon_state = "ereader"
+	icon = 'icons/obj/service/library.dmi'
+	icon_state = "book"
 	w_class = WEIGHT_CLASS_SMALL
 	lefthand_file = 'icons/mob/inhands/antag/clockwork_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/antag/clockwork_righthand.dmi'
-	inhand_icon_state = "ereader"
+	inhand_icon_state = "book"
 
 	/// Reference to the clockwork team (set on first use by a servant)
 	var/datum/team/clockwork/clockwork_team
