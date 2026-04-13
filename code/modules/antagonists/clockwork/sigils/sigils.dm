@@ -2,7 +2,7 @@
 	name = "clockwork sigil"
 	desc = "A glowing clockwork sigil inscribed into the floor."
 	icon = 'icons/obj/antags/cult/rune.dmi'
-	icon_state = "yourune"
+	icon_state = "1"
 	anchored = TRUE
 	layer = RUNE_LAYER
 	plane = FLOOR_PLANE

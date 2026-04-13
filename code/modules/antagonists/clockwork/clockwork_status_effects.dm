@@ -33,4 +33,3 @@
 /atom/movable/screen/alert/status_effect/clockwork/vanguard
 	name = "Vanguard"
 	desc = "Absorbing stuns. A fraction will be applied when this expires."
-	icon_state = "yourshades"

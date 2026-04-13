@@ -1,7 +1,7 @@
 /mob/camera/clockwork_eminence
 	name = "The Eminence"
 	icon = 'icons/mob/eyemob.dmi'
-	icon_state = "youreyemob"
+	icon_state = "marker"
 	invisibility = INVISIBILITY_OBSERVER
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	interaction_range = INFINITY

@@ -3,7 +3,7 @@
 	name = "integration cog"
 	desc = "A small bronze cog that can be inserted into an APC to siphon power."
 	icon = 'icons/obj/antags/cult/items.dmi'
-	icon_state = "ereader"
+	icon_state = "tome"
 	w_class = WEIGHT_CLASS_TINY
 	var/obj/machinery/power/apc/host_apc
 
@@ -12,12 +12,54 @@
 	START_PROCESSING(SSobj, src)
 
 /obj/item/clockwork_integration_cog/Destroy()
-	host_apc = null
+	if(host_apc)
+		UnregisterSignal(host_apc, COMSIG_QDELETING)
+		host_apc = null
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
+/obj/item/clockwork_integration_cog/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!istype(interacting_with, /obj/machinery/power/apc))
+		return NONE
+	if(!IS_CLOCKWORK(user))
+		to_chat(user, span_warning("The cog is incomprehensible to you."))
+		return ITEM_INTERACT_BLOCKING
+	var/obj/machinery/power/apc/target_apc = interacting_with
+	if(host_apc)
+		to_chat(user, span_warning("This cog is already installed in an APC."))
+		return ITEM_INTERACT_BLOCKING
+	if(locate(/obj/item/clockwork_integration_cog) in target_apc.contents)
+		to_chat(user, span_warning("[target_apc] already has an integration cog inside it."))
+		return ITEM_INTERACT_BLOCKING
+	user.visible_message(
+		span_warning("[user] presses [src] against [target_apc]..."),
+		span_brass("You begin integrating [src] into [target_apc]..."),
+	)
+	if(!do_after(user, 1 SECONDS, target = target_apc))
+		return ITEM_INTERACT_BLOCKING
+	if(QDELETED(target_apc) || host_apc || (locate(/obj/item/clockwork_integration_cog) in target_apc.contents))
+		return ITEM_INTERACT_BLOCKING
+	user.visible_message(
+		span_warning("[user] inserts [src] into [target_apc]!"),
+		span_brass("[src] fuses into [target_apc] and begins siphoning power."),
+	)
+	playsound(target_apc, 'sound/machines/clockcult/integration_cog_install.ogg', 50, TRUE)
+	forceMove(target_apc)
+	host_apc = target_apc
+	if(target_apc.locked)
+		target_apc.locked = FALSE
+		target_apc.update_appearance()
+	RegisterSignal(target_apc, COMSIG_QDELETING, PROC_REF(on_host_destroyed))
+	return ITEM_INTERACT_SUCCESS
+
+/obj/item/clockwork_integration_cog/proc/on_host_destroyed(datum/source)
+	SIGNAL_HANDLER
+	host_apc = null
+	qdel(src)
+
 /obj/item/clockwork_integration_cog/process(seconds_per_tick)
-	if(!host_apc)
+	if(QDELETED(host_apc))
+		host_apc = null
 		return
 	if(!host_apc.cell || host_apc.cell.charge <= 0)
 		return
@@ -31,7 +73,7 @@
 /obj/item/clothing/glasses/clockwork
 	name = "clockwork glasses"
 	icon = 'icons/obj/clothing/glasses.dmi'
-	icon_state = "yourshades"
+	icon_state = "sun"
 
 /obj/item/clothing/glasses/clockwork/wraith
 	name = "wraith spectacles"
@@ -72,7 +114,7 @@
 	name = "replica fabricator"
 	desc = "A clockwork omnitool that converts structures, consumes materials for power, and produces brass sheets."
 	icon = 'icons/obj/antags/cult/items.dmi'
-	icon_state = "ereader"
+	icon_state = "shifter"
 	w_class = WEIGHT_CLASS_NORMAL
 	lefthand_file = 'icons/mob/inhands/antag/clockwork_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/antag/clockwork_righthand.dmi'
