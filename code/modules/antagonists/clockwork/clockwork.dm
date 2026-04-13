@@ -107,6 +107,37 @@
 	for(var/datum/action/innate/clockwork/action in owner.current.actions)
 		action.Remove(owner.current)
 
+/datum/antagonist/clockwork/get_admin_commands()
+	. = ..()
+	.["Give Slab"] = CALLBACK(src, PROC_REF(admin_give_slab))
+	.["Give Slab + Fabricator"] = CALLBACK(src, PROC_REF(admin_give_full_kit))
+
+/datum/antagonist/clockwork/proc/admin_give_slab(mob/admin)
+	equip_servant()
+	to_chat(admin, span_notice("Gave clockwork slab to [owner.current]."))
+
+/datum/antagonist/clockwork/proc/admin_give_full_kit(mob/admin)
+	equip_servant()
+	var/obj/item/replica_fabricator/fab = new(owner.current.loc)
+	if(ishuman(owner.current))
+		var/mob/living/carbon/human/human_servant = owner.current
+		human_servant.put_in_hands(fab)
+	to_chat(admin, span_notice("Gave clockwork slab and replica fabricator to [owner.current]."))
+
+/datum/antagonist/clockwork/admin_add(datum/mind/new_owner, mob/admin)
+	// Create a team if one doesn't exist
+	if(!clockwork_team)
+		var/datum/team/clockwork/existing = locate() in GLOB.antagonist_teams
+		if(existing)
+			clockwork_team = existing
+		else
+			clockwork_team = new /datum/team/clockwork()
+			clockwork_team.setup_objectives()
+			// Give starting power so scripture is usable
+			clockwork_team.adjust_power(10000)
+	give_equipment = TRUE
+	. = ..()
+
 /// Subtype for constructs (marauders, cogscarabs)
 /datum/antagonist/clockwork/construct
 	name = "Clockwork Construct"
