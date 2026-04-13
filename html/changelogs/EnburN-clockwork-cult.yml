@@ -1,0 +1,12 @@
+author: "EnburN"
+delete-after: True
+changes:
+  - rscadd: "Reimplemented the Clockwork Cult game mode. Servants of Ratvar must defend the Ark on Reebe until it activates."
+  - rscadd: "Added the City of Cogs (Reebe) z-level with Ark, Herald's Beacon, Eminence Spire, and fortification zones."
+  - rscadd: "Added 10 Driver scripture, 6 Script scripture, 4 Application scripture, and 2 Cyborg scripture."
+  - rscadd: "Added clockwork structures: Ocular Warden, Mania Motor, Clockwork Obelisk."
+  - rscadd: "Added trap system with sender/receiver mechanics: levers, pressure sensors, repeaters, brass skewers, steam vents."
+  - rscadd: "Added the Eminence role - an invisible overseer elected by servants."
+  - rscadd: "Added Herald's Beacon for declaring war, transforming servants into clockwork golems."
+  - rscadd: "Added Clockwork Marauder and Cogscarab constructs."
+  - rscadd: "Added Ratvar entity summoned on Ark completion."
