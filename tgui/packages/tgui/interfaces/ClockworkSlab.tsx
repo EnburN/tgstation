@@ -165,7 +165,6 @@ function RecitalTab(props: {
               <Section
                 key={scripture.type}
                 title={scripture.name}
-                level={2}
                 buttons={
                   <Stack>
                     <Stack.Item>
