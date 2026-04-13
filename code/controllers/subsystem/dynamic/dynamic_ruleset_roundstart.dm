@@ -465,3 +465,51 @@
 		create_separatist_nation(department_type, announcement = FALSE, dangerous = FALSE, message_admins = FALSE)
 
 	GLOB.round_default_lawset = /datum/ai_laws/united_nations
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult
+	name = "Clockwork Cult"
+	config_tag = "Roundstart Clockwork Cult"
+	preview_antag_datum = /datum/antagonist/clockwork
+	pref_flag = ROLE_CULTIST
+	ruleset_flags = RULESET_HIGH_IMPACT
+	weight = alist(
+		DYNAMIC_TIER_LOW = 0,
+		DYNAMIC_TIER_LOWMEDIUM = 1,
+		DYNAMIC_TIER_MEDIUMHIGH = 3,
+		DYNAMIC_TIER_HIGH = 3,
+	)
+	min_pop = 30
+	blacklisted_roles = list(
+		JOB_HEAD_OF_PERSONNEL,
+	)
+	min_antag_cap = list("denominator" = 20, "offset" = 1)
+	repeatable = FALSE
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult/get_always_blacklisted_roles()
+	return ..() | JOB_CHAPLAIN
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult/create_execute_args()
+	return list(new /datum/team/clockwork())
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult/execute()
+	. = ..()
+	var/datum/team/clockwork/team = locate() in GLOB.antagonist_teams
+	team.setup_objectives()
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult/assign_role(datum/mind/candidate, datum/team/clockwork/team)
+	var/datum/antagonist/clockwork/servant = new()
+	servant.give_equipment = TRUE
+	candidate.add_antag_datum(servant, team)
+	var/turf/landing = get_reebe_landing()
+	if(landing && candidate.current)
+		do_teleport(candidate.current, landing, forceMove = TRUE)
+
+/datum/dynamic_ruleset/roundstart/clockwork_cult/round_result()
+	var/datum/team/clockwork/team = locate() in GLOB.antagonist_teams
+	if(!team)
+		return FALSE
+	var/result = team.check_cult_victory()
+	if(result == CLOCKWORK_VICTORY)
+		SSticker.mode_result = "win - clockwork cult win"
+		return TRUE
+	return FALSE
