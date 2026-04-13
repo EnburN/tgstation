@@ -3419,6 +3419,8 @@
 #include "code\modules\antagonists\clockwork\clockwork_comms.dm"
 #include "code\modules\antagonists\clockwork\clockwork_language.dm"
 #include "code\modules\antagonists\clockwork\clockwork_objectives.dm"
+#include "code\modules\antagonists\clockwork\clockwork_scripture.dm"
+#include "code\modules\antagonists\clockwork\clockwork_slab.dm"
 #include "code\modules\antagonists\clockwork\clockwork_team.dm"
 #include "code\modules\antagonists\cult\blood_magic.dm"
 #include "code\modules\antagonists\cult\cult_armor.dm"
