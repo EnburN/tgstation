@@ -26,6 +26,8 @@
 	var/datum/team/clockwork/clockwork_team
 	/// Whether the eminence has placed the altar this round
 	var/has_placed_altar = FALSE
+	/// The current placement preview overlay, if in placement mode
+	var/obj/effect/clockwork_placement_preview/placement_preview
 
 /mob/living/basic/clockwork_eminence/Initialize(mapload, datum/team/clockwork/team_ref)
 	. = ..()
@@ -48,6 +50,7 @@
 	if(clockwork_team?.eminence == src)
 		clockwork_team.eminence = null
 	clockwork_team = null
+	QDEL_NULL(placement_preview)
 	return ..()
 
 /mob/living/basic/clockwork_eminence/Login()
@@ -74,6 +77,7 @@
 
 /mob/living/basic/clockwork_eminence/proc/grant_eminence_abilities()
 	var/list/ability_types = list(
+		/datum/action/innate/clockwork/eminence/place_altar,
 		/datum/action/innate/clockwork/eminence/marker/rally,
 		/datum/action/innate/clockwork/eminence/marker/regroup,
 		/datum/action/innate/clockwork/eminence/marker/avoid,
