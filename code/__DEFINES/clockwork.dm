@@ -39,30 +39,6 @@
 /// Obelisk gateway cost
 #define OBELISK_GATEWAY_COST 2000
 
-// ---- Ark Phases ----
-#define ARK_PHASE_BUILD 1
-#define ARK_PHASE_PREP 2
-#define ARK_PHASE_DEFENSE 3
-#define ARK_PHASE_ASSAULT 4
-#define ARK_PHASE_CLEANUP 5
-#define ARK_PHASE_COMPLETE 6
-
-// ---- Ark Timings (in deciseconds) ----
-/// Minimum build phase duration
-#define ARK_BUILD_TIME_MIN (30 MINUTES)
-/// Maximum build phase duration
-#define ARK_BUILD_TIME_MAX (35 MINUTES)
-/// Prep phase duration (grace period)
-#define ARK_PREP_TIME (5 MINUTES)
-/// Defense phase duration
-#define ARK_DEFENSE_TIME (4 MINUTES)
-/// Assault phase duration
-#define ARK_ASSAULT_TIME (4 MINUTES)
-/// Cleanup phase duration
-#define ARK_CLEANUP_TIME (2 MINUTES)
-/// Warning before prep phase starts
-#define ARK_PREP_WARNING (30 SECONDS)
-
 // ---- Herald's Beacon ----
 /// Time window for war declaration vote
 #define HERALD_VOTE_WINDOW (5 MINUTES)
@@ -82,7 +58,6 @@
 // ---- Victory States ----
 #define CLOCKWORK_VICTORY 1
 #define CLOCKWORK_LOSS 2
-#define CLOCKWORK_RATVAR_KILLED 3
 
 // ---- Construction Values ----
 #define CV_FLOOR 1
@@ -135,9 +110,73 @@
 /// Obelisk self-gateway duration
 #define OBELISK_GATEWAY_DURATION (10 SECONDS)
 
-// ---- Lazy Template ----
-#define LAZY_TEMPLATE_KEY_REEBE "reebe_city_of_cogs"
+// ---- Altar Stage Thresholds ----
+/// Cult population required to awaken the altar
+#define ALTAR_AWAKEN_SERVANT_COUNT 6
+/// Total parts deposited required to expose the altar
+#define ALTAR_EXPOSE_PARTS_DEPOSITED 3
+
+// ---- Part Counts ----
+/// Number of relics required to summon Ratvar
+#define RELICS_REQUIRED 4
+/// Number of crafted components required to summon Ratvar
+#define COMPONENTS_REQUIRED 3
+/// Number of essence cogs required to summon Ratvar
+#define ESSENCE_COGS_REQUIRED 2
+
+// ---- Reforging Ritual ----
+/// Minimum reforging duration
+#define REFORGING_RITUAL_TIME_MIN (5 MINUTES)
+/// Maximum reforging duration
+#define REFORGING_RITUAL_TIME_MAX (8 MINUTES)
+/// Roundend countdown after Ratvar manifests
+#define RATVAR_ROUNDEND_DELAY (30 SECONDS)
+
+// ---- Crafting Timings ----
+/// Time to craft a single component at the workbench
+#define COMPONENT_CRAFT_TIME (60 SECONDS)
+/// Time for surgical excision at vivisection slab
+#define ESSENCE_EXCISION_TIME (60 SECONDS)
+/// Time to identify a relic by clockwork slab
+#define RELIC_IDENTIFICATION_TIME (5 SECONDS)
+/// Cooldown for the slab's locate-relic ability
+#define RELIC_LOCATE_COOLDOWN (2 MINUTES)
+/// Time to deposit a part at the altar (servants)
+#define PART_DEPOSIT_TIME (3 SECONDS)
+
+// ---- Eminence ----
+/// Vote window when a candidate uses an Eminence Spire
+#define EMINENCE_VOTE_WINDOW (60 SECONDS)
+/// Spire HP
+#define EMINENCE_SPIRE_HP 100
+
+// ---- Altar Materialization States ----
+#define ALTAR_STATE_DORMANT 1
+#define ALTAR_STATE_AWAKENED 2
+#define ALTAR_STATE_EXPOSED 3
+#define ALTAR_STATE_REFORGING 4
+#define ALTAR_STATE_COMPLETE 5
+
+// ---- Altar HP ----
+#define ALTAR_MAX_INTEGRITY 600
+
+// ---- Cogscarab ----
+/// Dim Gears stealth cooldown
+#define COGSCARAB_DIM_GEARS_COOLDOWN (30 SECONDS)
+/// Dim Gears duration
+#define COGSCARAB_DIM_GEARS_DURATION (15 SECONDS)
+/// Combat buff range from altar in tiles
+#define COGSCARAB_DEFENSE_BUFF_RANGE 7
+
+// ---- Vivisection Slab HP ----
+#define VIVISECTION_SLAB_HP 150
+
+// ---- Forge Workbench HP ----
+#define FORGE_WORKBENCH_HP 120
+
+// ---- Globals ----
+GLOBAL_DATUM(clockwork_altar, /obj/structure/clockwork_altar)
+GLOBAL_LIST_EMPTY(eminence_spires)
 
 // ---- Global Vars ----
 GLOBAL_VAR_INIT(clockwork_vitality, 0)
-GLOBAL_DATUM(clockwork_ark, /obj/structure/clockwork_ark)
