@@ -58,12 +58,12 @@
 	to_chat(src, span_bold("You are the Eminence — Ratvar's herald in the mortal realm."))
 	to_chat(src, "You are incorporeal and invisible to the living. Use your abilities to direct your servants and place the Altar of Reforging.")
 
-/mob/living/basic/clockwork_eminence/adjustBruteLoss(amount, updating_health, forced, required_status)
+/mob/living/basic/clockwork_eminence/adjust_brute_loss(amount, updating_health = TRUE, forced = FALSE, required_bodytype = ALL)
 	if(amount > 0 && !forced)
 		return 0
 	return ..()
 
-/mob/living/basic/clockwork_eminence/adjustFireLoss(amount, updating_health, forced, required_status)
+/mob/living/basic/clockwork_eminence/adjust_fire_loss(amount, updating_health = TRUE, forced = FALSE, required_bodytype = ALL)
 	if(amount > 0 && !forced)
 		return 0
 	return ..()

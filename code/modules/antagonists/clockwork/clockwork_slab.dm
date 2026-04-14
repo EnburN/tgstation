@@ -61,12 +61,10 @@
 	data["application_unlocked"] = team ? team.scripture_unlocked_application : FALSE
 	data["quickbinds"] = quickbinds.Copy()
 
-	if(team?.ark)
-		data["ark_phase"] = team.ark.phase
-		data["ark_time_remaining"] = team.ark.get_time_remaining()
+	if(team?.altar)
+		data["altar_state"] = team.altar.state
 	else
-		data["ark_phase"] = 0
-		data["ark_time_remaining"] = 0
+		data["altar_state"] = 0
 
 	data["servant_count"] = team ? length(team.members) : 0
 

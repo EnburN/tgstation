@@ -138,7 +138,7 @@
 	for(var/mat_type in material_reserves)
 		var/list/entry = list()
 		entry["type"] = "[mat_type]"
-		entry["name"] = initial(mat_type.name)
+		entry["name"] = "[mat_type]"
 		entry["amount"] = material_reserves[mat_type]
 		reserves_data += list(entry)
 	data["reserves"] = reserves_data

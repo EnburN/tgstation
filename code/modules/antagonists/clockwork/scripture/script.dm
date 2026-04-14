@@ -163,14 +163,9 @@
 		return FALSE
 	var/atom/target = targets[chosen]
 	var/turf/target_turf = get_turf(target)
-	var/uses = GATEWAY_DEFAULT_USES
-	var/duration = GATEWAY_DEFAULT_DURATION
-	if(istype(target, /obj/structure/destructible/clockwork/obelisk))
-		uses *= GATEWAY_OBELISK_MULTIPLIER
-		duration *= GATEWAY_OBELISK_MULTIPLIER
-	var/obj/effect/portal/clockwork/entry = new(get_turf(user), target_turf, duration, uses)
-	to_chat(user, span_brass("A spatial gateway opens before you."))
-	QDEL_IN(entry, duration)
+	// TODO: spatial gateway needs rework for station-only gameplay
+	do_teleport(user, target_turf, channel = TELEPORT_CHANNEL_CULT)
+	to_chat(user, span_brass("A spatial gateway transports you."))
 	return TRUE
 
 GLOBAL_LIST_EMPTY(clockwork_structures)

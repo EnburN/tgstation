@@ -65,13 +65,11 @@
 			STOP_PROCESSING(SSobj, src)
 			summon_ratvar()
 
-/// Announces Ratvar's arrival and spawns the Ratvar object.
+/// Spawns Ratvar. The announce and sound are handled by /obj/ratvar/Initialize().
 /obj/structure/clockwork_altar/proc/summon_ratvar()
 	var/turf/spawn_turf = get_turf(src)
 	if(clockwork_team)
 		clockwork_team.announce_to_servants(span_bold("<font size='4' color='#BE8700'>RATVAR HAS MANIFESTED!</font>"))
-	priority_announce("An incomprehensible clockwork entity has appeared on the station!", "EMERGENCY", 'sound/effects/magic/clockwork/ark_activation_sequence.ogg')
-	playsound(spawn_turf, 'sound/effects/magic/clockwork/ark_activation_sequence.ogg', 100, FALSE)
 	new /obj/ratvar(spawn_turf)
 
 // ---- Deposit Channel ----
@@ -159,9 +157,46 @@
 
 /obj/structure/clockwork_altar/attack_hand(mob/living/user, list/modifiers)
 	if(IS_CLOCKWORK(user))
-		to_chat(user, span_brass("You sense the altar is ready to receive Ratvar's fragments. Use them on the altar to deposit them."))
+		ui_interact(user)
 		return
 	return ..()
+
+/obj/structure/clockwork_altar/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ClockworkAltar")
+		ui.open()
+
+/obj/structure/clockwork_altar/ui_data(mob/user)
+	var/list/data = list()
+	data["state"] = state
+	switch(state)
+		if(ALTAR_STATE_DORMANT)
+			data["state_name"] = "Dormant"
+		if(ALTAR_STATE_AWAKENED)
+			data["state_name"] = "Awakened"
+		if(ALTAR_STATE_EXPOSED)
+			data["state_name"] = "Exposed"
+		if(ALTAR_STATE_REFORGING)
+			data["state_name"] = "Reforging"
+		if(ALTAR_STATE_COMPLETE)
+			data["state_name"] = "Complete"
+		else
+			data["state_name"] = "Unknown"
+	data["relics"] = relics_deposited
+	data["relics_required"] = RELICS_REQUIRED
+	data["components"] = components_deposited
+	data["components_required"] = COMPONENTS_REQUIRED
+	data["essence_cogs"] = essence_cogs_deposited
+	data["essence_cogs_required"] = ESSENCE_COGS_REQUIRED
+	// Reforging progress: value from 0-1 based on time elapsed vs total duration
+	if(state == ALTAR_STATE_REFORGING && reforging_ends_at > 0)
+		var/total_duration = max(1, (REFORGING_RITUAL_TIME_MIN + REFORGING_RITUAL_TIME_MAX) / 2)
+		var/elapsed = max(0, total_duration - (reforging_ends_at - world.time))
+		data["reforging_progress"] = clamp(elapsed / total_duration, 0, 1)
+	else
+		data["reforging_progress"] = 0
+	return data
 
 /// Cogscarab auto-deposit: instantly registers a part without the do_after channel.
 /obj/structure/clockwork_altar/attack_animal(mob/living/user, list/modifiers)

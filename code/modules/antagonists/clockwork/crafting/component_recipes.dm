@@ -13,7 +13,7 @@
 	/// Assoc list of input type → required amount/volume
 	var/list/inputs
 
-/datum/clockwork_recipe/Initialize()
+/datum/clockwork_recipe/New()
 	inputs = list()
 
 /// Returns TRUE if the given reserves list contains sufficient inputs.
@@ -36,7 +36,7 @@
 	var/list/parts = list()
 	for(var/input_type in inputs)
 		var/required = inputs[input_type]
-		parts += "[initial(input_type.name)] x[required]"
+		parts += "[input_type] x[required]"
 	return parts.Join(", ")
 
 // ---- Recipe Subtypes ----
@@ -48,7 +48,7 @@
 	power_cost = 2000
 	output_path = /obj/item/clockwork/component
 
-/datum/clockwork_recipe/rib/Initialize()
+/datum/clockwork_recipe/rib/New()
 	. = ..()
 	inputs[/datum/reagent/toxin/plasma] = 20
 	inputs[/obj/item/stack/tile/bronze] = 5
@@ -61,7 +61,7 @@
 	power_cost = 2000
 	output_path = /obj/item/clockwork/component
 
-/datum/clockwork_recipe/vertebra/Initialize()
+/datum/clockwork_recipe/vertebra/New()
 	. = ..()
 	inputs[/obj/item/stack/sheet/mineral/uranium] = 2
 	inputs[/obj/item/stock_parts/power_store/cell] = 1
@@ -74,7 +74,7 @@
 	power_cost = 3000
 	output_path = /obj/item/clockwork/component
 
-/datum/clockwork_recipe/clavicle/Initialize()
+/datum/clockwork_recipe/clavicle/New()
 	. = ..()
 	inputs[/obj/item/stack/ore/bluespace_crystal] = 2
 	inputs[/obj/item/stack/sheet/bronze] = 3

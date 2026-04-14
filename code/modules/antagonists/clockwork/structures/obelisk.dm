@@ -59,11 +59,6 @@
 	team.adjust_power(-OBELISK_GATEWAY_COST)
 	var/atom/target = targets[chosen]
 	var/turf/target_turf = get_turf(target)
-	var/uses = OBELISK_GATEWAY_USES
-	var/duration = OBELISK_GATEWAY_DURATION
-	if(istype(target, /obj/structure/destructible/clockwork/obelisk))
-		uses *= GATEWAY_OBELISK_MULTIPLIER
-		duration *= GATEWAY_OBELISK_MULTIPLIER
-	new /obj/effect/portal/clockwork(get_turf(src), target_turf, duration, uses)
-	new /obj/effect/portal/clockwork(target_turf, get_turf(src), duration, uses)
-	to_chat(user, span_brass("A two-way spatial gateway opens!"))
+	// TODO: spatial gateway needs rework for station-only gameplay
+	do_teleport(user, target_turf, channel = TELEPORT_CHANNEL_CULT)
+	to_chat(user, span_brass("A spatial gateway transports you!"))

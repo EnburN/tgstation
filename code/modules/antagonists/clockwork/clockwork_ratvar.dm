@@ -6,6 +6,7 @@
 	anchored = TRUE
 	density = TRUE
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	move_resist = INFINITY
 	max_integrity = 10000
 	light_range = 15
 	light_color = "#BE8700"
@@ -14,6 +15,9 @@
 
 /obj/ratvar/Initialize(mapload)
 	. = ..()
+	playsound(src, 'sound/effects/magic/clockwork/ark_activation_sequence.ogg', 100, FALSE)
+	priority_announce("An impossibly massive clockwork entity has manifested — Ratvar, the Clockwork Justiciar. The station is lost.", "EMERGENCY", 'sound/effects/magic/clockwork/ark_activation_sequence.ogg')
+	addtimer(CALLBACK(src, PROC_REF(end_round)), RATVAR_ROUNDEND_DELAY)
 	START_PROCESSING(SSobj, src)
 	for(var/datum/team/clockwork/team in GLOB.antagonist_teams)
 		for(var/datum/mind/servant_mind as anything in team.members)
@@ -49,3 +53,9 @@
 /obj/ratvar/proc/empower_servant(mob/living/servant)
 	ADD_TRAIT(servant, TRAIT_GODMODE, "ratvar_empowerment")
 	to_chat(servant, span_bold("<font size='4' color='#BE8700'>The power of Ratvar flows through you!</font>"))
+
+/// Triggers round end after the roundend delay expires.
+/obj/ratvar/proc/end_round()
+	if(QDELETED(src))
+		return
+	SSticker.force_ending = FORCE_END_ROUND

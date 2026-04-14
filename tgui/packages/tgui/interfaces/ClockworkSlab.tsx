@@ -42,28 +42,19 @@ type ClockworkSlabData = {
   script_unlocked: boolean;
   application_unlocked: boolean;
   quickbinds: string[];
-  ark_phase: number;
-  ark_time_remaining: number;
+  altar_state: number;
   servant_count: number;
   scriptures: Scripture[];
 };
 
-const ARK_PHASE_NAMES: Record<number, string> = {
-  0: 'Inactive',
-  1: 'Building',
-  2: 'Preparation',
-  3: 'Defense',
-  4: 'Assault',
-  5: 'Cleanup',
-  6: 'Complete',
+const ALTAR_STATE_NAMES: Record<number, string> = {
+  0: 'Unplaced',
+  1: 'Dormant',
+  2: 'Awakened',
+  3: 'Exposed',
+  4: 'Reforging',
+  5: 'Complete',
 };
-
-function formatTime(deciseconds: number): string {
-  const totalSeconds = Math.floor(deciseconds / 10);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
 
 function formatPower(watts: number): string {
   if (watts >= 1000) {
@@ -79,8 +70,7 @@ export function ClockworkSlab() {
   const {
     power,
     herald_active,
-    ark_phase,
-    ark_time_remaining,
+    altar_state,
     servant_count,
     scriptures,
     quickbinds,
@@ -97,9 +87,8 @@ export function ClockworkSlab() {
             <LabeledList.Item label="Servants">
               {servant_count}
             </LabeledList.Item>
-            <LabeledList.Item label="Ark">
-              {ARK_PHASE_NAMES[ark_phase] || 'Unknown'}
-              {ark_time_remaining > 0 && ` — ${formatTime(ark_time_remaining)}`}
+            <LabeledList.Item label="Altar">
+              {ALTAR_STATE_NAMES[altar_state] || 'Unknown'}
             </LabeledList.Item>
             {!!herald_active && (
               <LabeledList.Item label="Herald" color="good">

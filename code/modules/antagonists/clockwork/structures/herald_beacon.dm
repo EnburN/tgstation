@@ -46,6 +46,9 @@
 	priority_announce("ALERT: A massive energy surge has been detected from an extradimensional source.", "Clockwork Cult Alert", 'sound/effects/magic/clockwork/ark_activation.ogg')
 	team.announce_to_servants(span_bold("<font size='4' color='#BE8700'>THE HERALD HAS BEEN ACTIVATED! WAR IS DECLARED!</font>"))
 	team.announce_to_servants(span_brass("Scripture 30% faster. Power costs reduced 50%. You are now clockwork golems."))
+	// Force the altar to expose if it hasn't already
+	if(team.altar && team.altar.state < ALTAR_STATE_EXPOSED)
+		team.altar.advance_state(ALTAR_STATE_EXPOSED)
 	for(var/datum/mind/servant_mind as anything in team.members)
 		if(!servant_mind.current || servant_mind.current.stat == DEAD)
 			continue
@@ -54,6 +57,8 @@
 /obj/structure/clockwork/herald_beacon/proc/transform_to_golem(mob/living/servant)
 	ADD_TRAIT(servant, TRAIT_RESISTCOLD, "clockwork_golem")
 	ADD_TRAIT(servant, TRAIT_RESISTHEAT, "clockwork_golem")
+	ADD_TRAIT(servant, TRAIT_RESISTLOWPRESSURE, "clockwork_golem")
+	ADD_TRAIT(servant, TRAIT_RESISTHIGHPRESSURE, "clockwork_golem")
 	ADD_TRAIT(servant, TRAIT_NOBREATH, "clockwork_golem")
 	ADD_TRAIT(servant, TRAIT_RADIMMUNE, "clockwork_golem")
 	ADD_TRAIT(servant, TRAIT_NO_SLIP_ALL, "clockwork_golem")

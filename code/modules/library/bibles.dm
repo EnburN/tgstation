@@ -258,6 +258,9 @@ GLOBAL_LIST_INIT(bibleitemstates, list(
 		if(GLOB.religious_sect?.sect_dead_bless(target_mob, user) == BLESSING_FAILED)
 			target_mob.visible_message(span_danger("[user] smacks [target_mob]'s lifeless corpse with [src]."))
 			playsound(target_mob, SFX_PUNCH, 25, TRUE, -1)
+		else
+			// A blessed corpse cannot be used for clockwork essence excision
+			ADD_TRAIT(target_mob, TRAIT_BLESSED_CORPSE, "chaplain_blessing")
 		return
 
 	if(user == target_mob)

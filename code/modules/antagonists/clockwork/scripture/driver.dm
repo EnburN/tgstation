@@ -22,9 +22,34 @@
 	return TRUE
 
 /datum/clockwork_scripture/abscond/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
-	// Stub — full Abscond redesign happens in Phase 6 (Task 6.3).
-	to_chat(user, span_warning("Abscond is not yet available."))
-	return FALSE
+	var/datum/antagonist/clockwork/clock_datum = GET_CLOCKWORK(user)
+	var/datum/team/clockwork/team = clock_datum?.clockwork_team
+	var/turf/destination
+
+	// Primary destination: altar, if awakened or further
+	if(team?.altar && team.altar.state >= ALTAR_STATE_AWAKENED)
+		destination = get_turf(team.altar)
+
+	// Fallback: nearest clockwork floor within range 20
+	if(!destination)
+		destination = find_nearest_clockwork_floor(user)
+
+	if(!destination)
+		to_chat(user, span_warning("There is nowhere to escape to!"))
+		user.Knockdown(2 SECONDS)
+		return FALSE
+
+	// Extra cost if pulling a living mob
+	if(user.pulling && isliving(user.pulling))
+		var/extra_cost = 95
+		if(team?.herald_activated)
+			extra_cost = round(extra_cost * HERALD_POWER_COST_MULT)
+		team?.adjust_power(-(extra_cost))
+		var/mob/living/pulled = user.pulling
+		do_teleport(pulled, destination, channel = TELEPORT_CHANNEL_CULT)
+
+	do_teleport(user, destination, channel = TELEPORT_CHANNEL_CULT)
+	return TRUE
 
 // ---- Kindle ----
 /datum/clockwork_scripture/kindle
@@ -227,3 +252,16 @@
 	to_chat(user, span_brass("A cogscarab shell materializes nearby and searches for a willing spirit."))
 	INVOKE_ASYNC(shell, TYPE_PROC_REF(/obj/structure/clockwork_cogscarab_shell, poll_for_occupant))
 	return TRUE
+
+// ---- Abscond helper ----
+
+/// Searches range(20) from source for the nearest clockwork floor tile. Returns the turf or null.
+/proc/find_nearest_clockwork_floor(atom/source)
+	var/turf/nearest
+	var/nearest_dist = INFINITY
+	for(var/turf/open/floor/clockwork/candidate in range(20, source))
+		var/dist = get_dist(source, candidate)
+		if(dist < nearest_dist)
+			nearest_dist = dist
+			nearest = candidate
+	return nearest

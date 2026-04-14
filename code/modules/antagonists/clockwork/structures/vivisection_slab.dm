@@ -29,7 +29,7 @@
 	if(surgery_in_progress)
 		to_chat(user, span_warning("An excision is already in progress."))
 		return
-	var/mob/living/target = buckled_mob
+	var/mob/living/target = length(buckled_mobs) ? buckled_mobs[1] : null
 	if(!target)
 		to_chat(user, span_warning("Buckle a target to the slab first."))
 		return
@@ -37,7 +37,7 @@
 
 /// Validates and begins the surgical excision process.
 /obj/structure/clockwork_vivisection_slab/proc/begin_excision(mob/living/primary_servant)
-	var/mob/living/target = buckled_mob
+	var/mob/living/target = length(buckled_mobs) ? buckled_mobs[1] : null
 	if(!validate_target(target, primary_servant))
 		return
 	if(!has_assistant(primary_servant))
@@ -59,7 +59,8 @@
 		return FALSE
 	if(!IS_CLOCKWORK(primary_servant))
 		return FALSE
-	if(!buckled_mob || buckled_mob.stat == DEAD)
+	var/mob/living/buckled = length(buckled_mobs) ? buckled_mobs[1] : null
+	if(!buckled || buckled.stat == DEAD)
 		return FALSE
 	return TRUE
 
