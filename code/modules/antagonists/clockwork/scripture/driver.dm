@@ -204,3 +204,26 @@
 	workbench.clockwork_team = cult_datum?.clockwork_team
 	to_chat(user, span_brass("A Forge Workbench materializes before you."))
 	return TRUE
+
+// ---- Forge Cogscarab (Task 5.5) ----
+/datum/clockwork_scripture/forge_cogscarab
+	name = "Forge Cogscarab"
+	desc = "Forge a cogscarab shell on an adjacent tile and poll for a ghost to inhabit it."
+	tier = SCRIPTURE_DRIVER
+	power_cost = 500
+	invocation_time = 8 SECONDS
+	whispered_invocation = "Scar-ab for-ge!"
+
+/datum/clockwork_scripture/forge_cogscarab/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
+	var/turf/spawn_turf
+	for(var/turf/candidate in orange(1, user))
+		if(!candidate.density && !locate(/obj/structure) in candidate)
+			spawn_turf = candidate
+			break
+	if(!spawn_turf)
+		to_chat(user, span_warning("There is no clear adjacent tile to forge a cogscarab shell on."))
+		return FALSE
+	var/obj/structure/clockwork_cogscarab_shell/shell = new(spawn_turf)
+	to_chat(user, span_brass("A cogscarab shell materializes nearby and searches for a willing spirit."))
+	INVOKE_ASYNC(shell, TYPE_PROC_REF(/obj/structure/clockwork_cogscarab_shell, poll_for_occupant))
+	return TRUE

@@ -65,12 +65,6 @@
 			STOP_PROCESSING(SSobj, src)
 			summon_ratvar()
 
-/obj/structure/clockwork_altar/process(seconds_per_tick)
-	if(state != ALTAR_STATE_REFORGING)
-		return
-	if(world.time >= reforging_ends_at)
-		advance_state(ALTAR_STATE_COMPLETE)
-
 /// Announces Ratvar's arrival and spawns the Ratvar object.
 /obj/structure/clockwork_altar/proc/summon_ratvar()
 	var/turf/spawn_turf = get_turf(src)
@@ -168,3 +162,44 @@
 		to_chat(user, span_brass("You sense the altar is ready to receive Ratvar's fragments. Use them on the altar to deposit them."))
 		return
 	return ..()
+
+/// Cogscarab auto-deposit: instantly registers a part without the do_after channel.
+/obj/structure/clockwork_altar/attack_animal(mob/living/user, list/modifiers)
+	if(!istype(user, /mob/living/simple_animal/hostile/clockwork/cogscarab))
+		return ..()
+	if(!can_accept_deposits())
+		to_chat(user, span_warning("The altar does not yet stir."))
+		return
+	// Find first valid clockwork part held by the cogscarab
+	var/obj/item/held
+	for(var/obj/item/candidate as anything in user.held_items)
+		if(is_valid_part(candidate))
+			held = candidate
+			break
+	if(!held)
+		to_chat(user, span_warning("You have nothing valid to deposit."))
+		return
+	user.dropItemToGround(held, force = TRUE)
+	register_deposit(held)
+	qdel(held)
+
+// ---- Defense Buff Processing (Task 5.4) ----
+
+/obj/structure/clockwork_altar/process(seconds_per_tick)
+	if(state == ALTAR_STATE_REFORGING)
+		if(world.time >= reforging_ends_at)
+			advance_state(ALTAR_STATE_COMPLETE)
+		return
+	if(state >= ALTAR_STATE_EXPOSED)
+		buff_nearby_cogscarabs()
+
+/// Scans for cogscarabs within COGSCARAB_DEFENSE_BUFF_RANGE and applies or clears their defense buff.
+/obj/structure/clockwork_altar/proc/buff_nearby_cogscarabs()
+	var/list/nearby_scarabs = list()
+	for(var/mob/living/simple_animal/hostile/clockwork/cogscarab/scarab in range(COGSCARAB_DEFENSE_BUFF_RANGE, src))
+		nearby_scarabs += scarab
+		scarab.apply_defense_buff()
+	// Clear buff on any cogscarab that has left range
+	for(var/mob/living/simple_animal/hostile/clockwork/cogscarab/scarab in world)
+		if(!(scarab in nearby_scarabs) && scarab.defense_buffed)
+			scarab.clear_defense_buff()

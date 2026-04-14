@@ -6,6 +6,8 @@
 #define TRAIT_CLOCKWORK_SERVANT "clockwork_servant"
 /// Applied to a corpse blessed in the chapel, preventing it from being used for Vivisection excision.
 #define TRAIT_BLESSED_CORPSE "blessed_corpse"
+/// Applied to a cogscarab that is currently receiving the altar defense buff.
+#define TRAIT_COGSCARAB_DEFENDING "cogscarab_defending"
 
 // ---- Macros ----
 /// Checks if the given mob is a clockwork servant
