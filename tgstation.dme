@@ -3446,6 +3446,7 @@
 #include "code\modules\antagonists\clockwork\structures\mania_motor.dm"
 #include "code\modules\antagonists\clockwork\structures\obelisk.dm"
 #include "code\modules\antagonists\clockwork\structures\ocular_warden.dm"
+#include "code\modules\antagonists\clockwork\structures\vivisection_slab.dm"
 #include "code\modules\antagonists\clockwork\structures\workbench.dm"
 #include "code\modules\antagonists\clockwork\traps\traps.dm"
 #include "code\modules\antagonists\cult\blood_magic.dm"
