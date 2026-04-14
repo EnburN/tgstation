@@ -1,6 +1,5 @@
 /// The Altar of Reforging: the central structure of the Clockwork Cult.
 /// Servants deposit relics, components, and Essence Cogs here to summon Ratvar.
-/// Full deposit and TGUI implementation lives in Phase 3/6.
 /obj/structure/clockwork_altar
 	name = "Altar of Reforging"
 	desc = "A towering altar of brass and gears. Its purpose is not yet clear."
@@ -18,6 +17,12 @@
 	var/destroyed = FALSE
 	/// World.time when the reforging ritual ends
 	var/reforging_ends_at = 0
+	/// Number of relics deposited so far
+	var/relics_deposited = 0
+	/// Number of components deposited so far
+	var/components_deposited = 0
+	/// Number of essence cogs deposited so far
+	var/essence_cogs_deposited = 0
 
 /obj/structure/clockwork_altar/Initialize(mapload)
 	. = ..()
@@ -75,6 +80,85 @@
 	playsound(spawn_turf, 'sound/effects/magic/clockwork/ark_activation_sequence.ogg', 100, FALSE)
 	new /obj/ratvar(spawn_turf)
 
-/// Attempt to deposit a part at the altar. Stub — full logic in Phase 3.
+// ---- Deposit Channel ----
+
+/// Returns TRUE if the altar is currently accepting deposits.
+/obj/structure/clockwork_altar/proc/can_accept_deposits()
+	return (state >= ALTAR_STATE_AWAKENED && state < ALTAR_STATE_REFORGING)
+
+/// Returns TRUE if the given item is a valid depositable part.
+/obj/structure/clockwork_altar/proc/is_valid_part(obj/item/part)
+	if(!istype(part))
+		return FALSE
+	return istype(part, /obj/item/clockwork)
+
+/// Handle a servant attempting to deposit a part. Returns TRUE on success.
 /obj/structure/clockwork_altar/proc/deposit_part(mob/living/depositor, obj/item/part)
-	return FALSE
+	if(!can_accept_deposits())
+		to_chat(depositor, span_warning("The altar does not yet stir."))
+		return FALSE
+	if(!is_valid_part(part))
+		to_chat(depositor, span_warning("This is not a piece of Ratvar."))
+		return FALSE
+	if(!do_after(depositor, PART_DEPOSIT_TIME, target = src))
+		return FALSE
+	if(QDELETED(part))
+		return FALSE
+	register_deposit(part)
+	qdel(part)
+	return TRUE
+
+/// Registers a deposited part — increments counters, announces, and checks for state transitions.
+/obj/structure/clockwork_altar/proc/register_deposit(obj/item/part)
+	var/part_name = part.name
+	if(istype(part, /obj/item/clockwork/relic))
+		relics_deposited++
+		if(clockwork_team)
+			clockwork_team.relics_recovered = relics_deposited
+		if(clockwork_team)
+			clockwork_team.announce_to_servants(span_brass("A relic has been returned to the altar! ([relics_deposited]/[RELICS_REQUIRED] relics)"))
+	else if(istype(part, /obj/item/clockwork/component))
+		components_deposited++
+		if(clockwork_team)
+			clockwork_team.components_forged = components_deposited
+		if(clockwork_team)
+			clockwork_team.announce_to_servants(span_brass("A component has been delivered to the altar! ([components_deposited]/[COMPONENTS_REQUIRED] components)"))
+	else if(istype(part, /obj/item/clockwork/essence_cog))
+		essence_cogs_deposited++
+		if(clockwork_team)
+			clockwork_team.essence_cogs_delivered = essence_cogs_deposited
+		if(clockwork_team)
+			clockwork_team.announce_to_servants(span_brass("An Essence Cog has been sealed within the altar! ([essence_cogs_deposited]/[ESSENCE_COGS_REQUIRED] cogs)"))
+	else
+		if(clockwork_team)
+			clockwork_team.announce_to_servants(span_brass("[part_name] has been offered to the altar."))
+	playsound(src, 'sound/effects/magic/clockwork/invoke_general.ogg', 50, FALSE)
+	check_state_progression()
+
+/// Checks whether the altar should advance to a new state based on deposits.
+/obj/structure/clockwork_altar/proc/check_state_progression()
+	if(state == ALTAR_STATE_AWAKENED)
+		var/total_deposited = relics_deposited + components_deposited + essence_cogs_deposited
+		if(total_deposited >= ALTAR_EXPOSE_PARTS_DEPOSITED)
+			advance_state(ALTAR_STATE_EXPOSED)
+	if(state == ALTAR_STATE_EXPOSED)
+		if(relics_deposited >= RELICS_REQUIRED && components_deposited >= COMPONENTS_REQUIRED && essence_cogs_deposited >= ESSENCE_COGS_REQUIRED)
+			begin_reforging()
+
+/// Begins the Reforging ritual — transitions the altar to REFORGING state.
+/obj/structure/clockwork_altar/proc/begin_reforging()
+	advance_state(ALTAR_STATE_REFORGING)
+
+// ---- Interaction Overrides ----
+
+/obj/structure/clockwork_altar/attackby(obj/item/weapon, mob/living/user, params)
+	if(IS_CLOCKWORK(user) && is_valid_part(weapon))
+		deposit_part(user, weapon)
+		return
+	return ..()
+
+/obj/structure/clockwork_altar/attack_hand(mob/living/user, list/modifiers)
+	if(IS_CLOCKWORK(user))
+		to_chat(user, span_brass("You sense the altar is ready to receive Ratvar's fragments. Use them on the altar to deposit them."))
+		return
+	return ..()
