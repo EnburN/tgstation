@@ -104,6 +104,8 @@
 	hierophant_action.Grant(owner.current)
 	var/datum/action/innate/clockwork/oppose_eminence/oppose_action = new(owner.current)
 	oppose_action.Grant(owner.current)
+	var/datum/action/innate/clockwork/locate_relic/locate_action = new(owner.current)
+	locate_action.Grant(owner.current)
 
 /datum/antagonist/clockwork/proc/remove_servant_actions()
 	for(var/datum/action/innate/clockwork/action in owner.current.actions)

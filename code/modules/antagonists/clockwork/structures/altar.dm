@@ -90,6 +90,12 @@
 /obj/structure/clockwork_altar/proc/is_valid_part(obj/item/part)
 	if(!istype(part))
 		return FALSE
+	if(istype(part, /obj/item/clockwork/relic))
+		// Relics must be identified before they can be deposited
+		var/datum/component/clockwork_relic/relic_component = part.GetComponent(/datum/component/clockwork_relic)
+		if(!relic_component?.identified)
+			return FALSE
+		return TRUE
 	return istype(part, /obj/item/clockwork)
 
 /// Handle a servant attempting to deposit a part. Returns TRUE on success.

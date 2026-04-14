@@ -113,10 +113,3 @@
 
 	return report.Join()
 
-/// Stub — implemented in Phase 4
-/proc/flag_random_relics(datum/team/clockwork/cult_team)
-	return
-
-/// Stub — implemented in Phase 4
-/proc/populate_essence_targets(datum/team/clockwork/cult_team)
-	return
