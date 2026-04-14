@@ -495,14 +495,13 @@
 	. = ..()
 	var/datum/team/clockwork/team = locate() in GLOB.antagonist_teams
 	team.setup_objectives()
+	flag_random_relics(team)
+	populate_essence_targets(team)
 
 /datum/dynamic_ruleset/roundstart/clockwork_cult/assign_role(datum/mind/candidate, datum/team/clockwork/team)
 	var/datum/antagonist/clockwork/servant = new()
 	servant.give_equipment = TRUE
 	candidate.add_antag_datum(servant, team)
-	var/turf/landing = get_reebe_landing()
-	if(landing && candidate.current)
-		do_teleport(candidate.current, landing, forceMove = TRUE)
 
 /datum/dynamic_ruleset/roundstart/clockwork_cult/round_result()
 	var/datum/team/clockwork/team = locate() in GLOB.antagonist_teams

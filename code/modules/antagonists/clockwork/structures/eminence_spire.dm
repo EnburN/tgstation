@@ -58,7 +58,7 @@
 		volunteer = null
 		eminence_created = FALSE
 		return
-	var/mob/camera/clockwork_eminence/eminence = new(get_turf(src), team)
+	var/mob/living/basic/clockwork_eminence/eminence = new(get_turf(src))
 	sacrifice.mind.transfer_to(eminence)
 	sacrifice.gib()
 	team.announce_to_servants(span_bold("<font size='4'>The Eminence has risen!</font>"))

@@ -26,8 +26,6 @@
 	killed = TRUE
 	for(var/datum/team/clockwork/team in GLOB.antagonist_teams)
 		team.announce_to_servants(span_bold(span_danger("RATVAR HAS FALLEN!")))
-		for(var/datum/objective/clockwork/defend_ark/obj in team.objectives)
-			obj.ark_destroyed = TRUE
 	return ..()
 
 /obj/ratvar/process(seconds_per_tick)

@@ -22,34 +22,9 @@
 	return TRUE
 
 /datum/clockwork_scripture/abscond/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
-	var/datum/antagonist/clockwork/clock_datum = GET_CLOCKWORK(user)
-	var/datum/team/clockwork/team = clock_datum.clockwork_team
-	if(user.pulling && isliving(user.pulling))
-		var/extra = 95
-		if(team.herald_activated)
-			extra *= HERALD_POWER_COST_MULT
-		team.adjust_power(-extra)
-	var/turf/destination = get_reebe_landing()
-	if(!destination)
-		to_chat(user, span_warning("Cannot locate Reebe!"))
-		return FALSE
-	do_teleport(user, destination, forceMove = TRUE)
-	if(user.pulling && isliving(user.pulling))
-		do_teleport(user.pulling, destination, forceMove = TRUE)
-	playsound(user, 'sound/effects/magic/clockwork/invoke_general.ogg', 50, TRUE)
-	to_chat(user, span_brass("You are whisked away to the City of Cogs."))
-	return TRUE
-
-/proc/get_reebe_landing()
-	for(var/area/reebe/build_zone/landing_area in GLOB.areas)
-		var/turf/landing = pick(get_area_turfs(landing_area))
-		if(landing)
-			return landing
-	for(var/area/reebe/any_area in GLOB.areas)
-		var/turf/landing = pick(get_area_turfs(any_area))
-		if(landing)
-			return landing
-	return null
+	// Stub — full Abscond redesign happens in Phase 6 (Task 6.3).
+	to_chat(user, span_warning("Abscond is not yet available."))
+	return FALSE
 
 // ---- Kindle ----
 /datum/clockwork_scripture/kindle

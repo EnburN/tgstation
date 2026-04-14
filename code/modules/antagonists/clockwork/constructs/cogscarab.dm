@@ -16,7 +16,7 @@
 	for(var/datum/team/clockwork/team in GLOB.antagonist_teams)
 		team.add_member(scarab.mind)
 		break
-	to_chat(scarab, span_bold("You are a Cogscarab! Build defenses on Reebe. You cannot leave."))
+	to_chat(scarab, span_bold("You are a Cogscarab! Build clockwork defenses and assist the cult."))
 	qdel(src)
 
 /mob/living/simple_animal/hostile/clockwork/cogscarab
@@ -33,14 +33,3 @@
 	stat_attack = CONSCIOUS
 	attack_verb_continuous = "pinches"
 	attack_verb_simple = "pinch"
-	var/reebe_locked = TRUE
-
-/mob/living/simple_animal/hostile/clockwork/cogscarab/Move(atom/newloc, direct, glide_size_override, update_dir)
-	if(reebe_locked)
-		var/turf/destination = get_turf(newloc)
-		if(destination)
-			var/area/dest_area = get_area(destination)
-			if(!istype(dest_area, /area/reebe))
-				to_chat(src, span_warning("You cannot leave the City of Cogs!"))
-				return FALSE
-	return ..()
