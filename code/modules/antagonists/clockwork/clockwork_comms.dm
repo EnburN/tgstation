@@ -52,3 +52,24 @@
 			to_chat(listener, "[link] [formatted_message]", type = MESSAGE_TYPE_RADIO)
 
 	user.log_talk(message, LOG_SAY, tag = "clockwork")
+
+// ---- Oppose Eminence ----
+
+/// Allows a servant to vote against the current Eminence candidate during a spire vote.
+/datum/action/innate/clockwork/oppose_eminence
+	name = "Oppose Eminence"
+	desc = "Vote against the current Eminence candidate at the nearest active Eminence Spire vote."
+	button_icon_state = "cult_comms"
+	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_CONSCIOUS
+
+/datum/action/innate/clockwork/oppose_eminence/Activate()
+	var/obj/structure/clockwork/eminence_spire/active_spire
+	for(var/obj/structure/clockwork/eminence_spire/spire as anything in GLOB.eminence_spires)
+		if(spire.vote_in_progress && spire.candidate != owner.mind)
+			active_spire = spire
+			break
+	if(!active_spire)
+		to_chat(owner, span_warning("There is no active Eminence vote to oppose."))
+		return
+	active_spire.register_opposition(owner)
+

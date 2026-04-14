@@ -3428,6 +3428,7 @@
 #include "code\modules\antagonists\clockwork\constructs\marauder.dm"
 #include "code\modules\antagonists\clockwork\cyborg_modules.dm"
 #include "code\modules\antagonists\clockwork\eminence.dm"
+#include "code\modules\antagonists\clockwork\eminence_abilities.dm"
 #include "code\modules\antagonists\clockwork\scripture\application.dm"
 #include "code\modules\antagonists\clockwork\scripture\cyborg.dm"
 #include "code\modules\antagonists\clockwork\scripture\driver.dm"
