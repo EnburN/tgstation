@@ -174,3 +174,22 @@
 	return TRUE
 
 GLOBAL_LIST_EMPTY(clockwork_structures)
+
+// ---- Vivisection Slab ----
+/datum/clockwork_scripture/vivisection_slab
+	name = "Vivisection Slab"
+	desc = "Anchor a Vivisection Slab for surgical excision of mindshielded subjects."
+	tier = SCRIPTURE_SCRIPT
+	power_cost = 1500
+	invocation_time = 8 SECONDS
+	whispered_invocation = "Viv-i-sect soul!"
+
+/datum/clockwork_scripture/vivisection_slab/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
+	var/turf/target = get_turf(user)
+	if(!is_valid_clockwork_placement(target))
+		to_chat(user, span_warning("Cannot anchor a Slab here."))
+		return FALSE
+	var/datum/antagonist/clockwork/cult_datum = GET_CLOCKWORK(user)
+	new /obj/structure/clockwork_vivisection_slab(target, cult_datum?.clockwork_team)
+	to_chat(user, span_brass("A Vivisection Slab materializes before you."))
+	return TRUE

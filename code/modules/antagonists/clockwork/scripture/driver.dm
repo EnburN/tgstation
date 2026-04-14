@@ -164,3 +164,43 @@
 	new /obj/effect/clockwork_sigil/transgression(get_turf(user))
 	to_chat(user, span_brass("A Sigil of Transgression shimmers into existence beneath you."))
 	return TRUE
+
+// ---- Eminence Spire ----
+/datum/clockwork_scripture/eminence_spire
+	name = "Eminence Spire"
+	desc = "Forge an Eminence Spire to choose your leader."
+	tier = SCRIPTURE_DRIVER
+	power_cost = 1000
+	invocation_time = 10 SECONDS
+	whispered_invocation = "Em-in-ence rise!"
+
+/datum/clockwork_scripture/eminence_spire/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
+	var/turf/target = get_turf(user)
+	if(!is_valid_clockwork_placement(target))
+		to_chat(user, span_warning("Cannot anchor a Spire here."))
+		return FALSE
+	var/datum/antagonist/clockwork/cult_datum = GET_CLOCKWORK(user)
+	var/obj/structure/clockwork/eminence_spire/spire = new(target)
+	spire.clockwork_team = cult_datum?.clockwork_team
+	to_chat(user, span_brass("An Eminence Spire materializes before you."))
+	return TRUE
+
+// ---- Forge Workbench ----
+/datum/clockwork_scripture/forge_workbench
+	name = "Forge Workbench"
+	desc = "Anchor a Forge Workbench for crafting Ratvar's components."
+	tier = SCRIPTURE_DRIVER
+	power_cost = 750
+	invocation_time = 6 SECONDS
+	whispered_invocation = "Forge-rath craft!"
+
+/datum/clockwork_scripture/forge_workbench/do_invoke(mob/living/user, obj/item/clockwork_slab/slab)
+	var/turf/target = get_turf(user)
+	if(!is_valid_clockwork_placement(target))
+		to_chat(user, span_warning("Cannot anchor a Workbench here."))
+		return FALSE
+	var/datum/antagonist/clockwork/cult_datum = GET_CLOCKWORK(user)
+	var/obj/structure/clockwork_workbench/workbench = new(target)
+	workbench.clockwork_team = cult_datum?.clockwork_team
+	to_chat(user, span_brass("A Forge Workbench materializes before you."))
+	return TRUE
