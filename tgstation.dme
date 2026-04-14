@@ -3433,6 +3433,7 @@
 #include "code\modules\antagonists\clockwork\scripture\driver.dm"
 #include "code\modules\antagonists\clockwork\scripture\script.dm"
 #include "code\modules\antagonists\clockwork\sigils\sigils.dm"
+#include "code\modules\antagonists\clockwork\structures\altar.dm"
 #include "code\modules\antagonists\clockwork\structures\clockwork_structures.dm"
 #include "code\modules\antagonists\clockwork\structures\eminence_spire.dm"
 #include "code\modules\antagonists\clockwork\structures\herald_beacon.dm"
